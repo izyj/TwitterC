@@ -21,7 +21,7 @@ import javafx.collections.ObservableList;
 public class TwitterAction implements TwitterMethodsInterface {
 
 	private static Logger LOG = Logger.getLogger(TwitterAction.class);
-
+	private Twitter twitter;
 	public String postTweet(String message) {
 		// TODO Auto-generated method stub
 		return null;
@@ -32,12 +32,12 @@ public class TwitterAction implements TwitterMethodsInterface {
 		String result = "SUCCESS";
 		try {
 		    // The factory instance is re-useable and thread safe.
-		    Twitter twitter = TwitterFactory.getSingleton();
+			twitter = TwitterFactory.getSingleton();
 		    twitter.setOAuthConsumer(Twit4lifeKeys.consumerKeys.getKey(), Twit4lifeKeys.consumerKeys.getSecret());
 		    RequestToken requestToken = twitter.getOAuthRequestToken();
 		    AccessToken accessToken = new AccessToken(Twit4lifeKeys.accessTokenKeys.getKey(), Twit4lifeKeys.accessTokenKeys.getSecret());
 		    twitter.setOAuthAccessToken(accessToken);
-		    LOG.info("L'application s'est connecté correctement.");
+		    LOG.info("L'application s'est connecter correctement.");
 
 		}
 	   catch (TwitterException te) {
@@ -53,7 +53,7 @@ public class TwitterAction implements TwitterMethodsInterface {
 	}
 
 	public String updateStatut(String message) throws TwitterException {
-		Twitter twitter = TwitterFactory.getSingleton();
+		twitter = TwitterFactory.getSingleton();
 		Status status = twitter.updateStatus(message);
 		LOG.info("Statut successfully updated.");
 		return null;
@@ -73,6 +73,8 @@ public class TwitterAction implements TwitterMethodsInterface {
 
 	    return statuses;
 	}
+
+
 
 
 

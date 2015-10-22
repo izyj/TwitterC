@@ -36,6 +36,7 @@ public class Main extends Application {
     public Main() {
     		action = new TwitterAction();
     		action.connexionTweeter();
+
 	}
 	 /**
      * Initializes the root layout.
