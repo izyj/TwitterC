@@ -1,4 +1,4 @@
-package com.twi4life.controller;
+package com.twi4life.dao;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -13,6 +13,9 @@ import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 
 import com.twit4life.modele.Twit4lifeKeys;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 
 public class TwitterAction implements TwitterMethodsInterface {
@@ -51,18 +54,26 @@ public class TwitterAction implements TwitterMethodsInterface {
 
 	public String updateStatut(String message) throws TwitterException {
 		Twitter twitter = TwitterFactory.getSingleton();
-		Status status = twitter.updateStatus("test");
+		Status status = twitter.updateStatus(message);
 		LOG.info("Statut successfully updated.");
 		return null;
+
+
+
 	}
 
+	/**
+	 * récupere la liste des status de twitter
+	 * @return liste status
+	 */
 	public List<Status> getTimeline() throws TwitterException {
-
 		Twitter twitter = TwitterFactory.getSingleton();
 	    List<Status> statuses = twitter.getHomeTimeline();
 	    LOG.info("Timeline sent.");
 
-	    return null;
+	    return statuses;
 	}
+
+
 
 }

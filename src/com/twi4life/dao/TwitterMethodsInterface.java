@@ -1,4 +1,4 @@
-package com.twi4life.controller;
+package com.twi4life.dao;
 
 import java.util.List;
 
