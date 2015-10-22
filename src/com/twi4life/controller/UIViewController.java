@@ -1,12 +1,12 @@
-package com.twit4life.view;
+package com.twi4life.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.twi4life.dao.TwitterAction;
 import com.twit4life.utils.AsyncImageProperty;
+import com.twit4life.view.TimelineUpdateThread;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -17,6 +17,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -25,7 +26,6 @@ import twitter.client.Main;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
-import twitter4j.User;
 
 public class UIViewController implements Initializable {
 
@@ -33,6 +33,7 @@ public class UIViewController implements Initializable {
 	private ListView<String> listStatus;
 	private ObservableList<String> statusData ;
 	private Main main ;
+	@FXML
 	private BorderPane rootLayout;
 	@FXML
 	private Button updateButton;
@@ -40,25 +41,28 @@ public class UIViewController implements Initializable {
 	@FXML
 	private TextField textFieldStatus;
 	@FXML
-	private ImageView profilPicture;
+	private ImageView profilPicture  = new ImageView();
+	@FXML
+	private Label follow = new Label();
+
+	@FXML
+	private Label followers = new Label();
+
+	private Twitter twitter;
+
 
 
 	public UIViewController() {
 		statusData = FXCollections.observableArrayList();
 		action = new TwitterAction();
+
 	}
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		twitter =  TwitterFactory.getSingleton();
+		getProfilImage();
+		getNumberOfFollowerAnd();
 
-		try {
-			getProfilImage();
-		} catch (IllegalStateException e) {
-
-			e.printStackTrace();
-		} catch (TwitterException e) {
-
-			e.printStackTrace();
-		}
 	}
 
 	  /**
@@ -85,12 +89,14 @@ public class UIViewController implements Initializable {
             	Platform.runLater(new Runnable() {
             	public void run() {
 
-            		statusData.clear();
+
             		statusData = test.getListTweet();
             		statusData.addListener((ListChangeListener.Change<? extends String> change) -> {
 
             			 if(change.next()){
-            				 System.out.println("ajout");
+            				 statusData.clear();
+                			 statusData = test.getListTweet();
+
             			 }
             		 });
 
@@ -127,17 +133,50 @@ public class UIViewController implements Initializable {
 
     }
 
-    @FXML
-    public void getProfilImage() throws IllegalStateException, TwitterException{
-    	Twitter twitter =  TwitterFactory.getSingleton();
-    	profilPicture = new ImageView();
-    	String  url = twitter.showUser(twitter.getId()).getProfileImageURL();
-    	AsyncImageProperty imageProperty = new AsyncImageProperty();
-    	profilPicture.imageProperty().bind(imageProperty);
-    	imageProperty.imageUrlProperty().set(url);
+    /**
+     * Methode qui récupère et affiche l'image de profil
+     */
+    public void getProfilImage() {
+
+
+        		try {
+
+		    	String url;
+				url = twitter.showUser(twitter.getId()).getBiggerProfileImageURL();
+		    	AsyncImageProperty imageProperty = new AsyncImageProperty();
+		    	profilPicture.imageProperty().bind(imageProperty);
+		    	imageProperty.imageUrlProperty().set(url);
+
+				} catch (IllegalStateException | TwitterException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+
 
 
     }
+
+    public void getNumberOfFollowerAnd(){
+    	try {
+    		followers.setText(Integer.toString(twitter.showUser(twitter.getId()).getFollowersCount()));
+    		follow.setText(Integer.toString(twitter.showUser(twitter.getId()).getFriendsCount()));
+    		} catch (IllegalStateException | TwitterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+    }
+
+    public void setRootLayout(BorderPane rootLayout) {
+		this.rootLayout = rootLayout;
+	}
+    public BorderPane getRootLayout() {
+		return rootLayout;
+	}
+
+
 
 }
 

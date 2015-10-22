@@ -19,14 +19,9 @@ public class TimelineView extends  Scene  {
             loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/com/twit4life/view/ListViewTimeline.fxml"));
             AnchorPane timeLineOverview = (AnchorPane) loader.load();
-
             // Set person overview into the center of root layout.
             BorderPane  rootLayout =((BorderPane) this.getRoot());
-            rootLayout.setBottom(timeLineOverview);
-
-
-
-
+            rootLayout.setCenter(timeLineOverview);
 
         } catch (IOException e) {
             e.printStackTrace();

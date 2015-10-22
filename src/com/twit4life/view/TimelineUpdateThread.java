@@ -2,9 +2,9 @@ package com.twit4life.view;
 
 import java.util.List;
 
-import javafx.concurrent.Task;
-import com.twi4life.dao.TwitterAction;
+import com.twi4life.controller.TwitterAction;
 
+import javafx.concurrent.Task;
 import javafx.collections.ObservableList;
 import twitter4j.Status;
 import twitter4j.TwitterException;
