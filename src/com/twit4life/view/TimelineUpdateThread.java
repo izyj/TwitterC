@@ -3,9 +3,15 @@ package com.twit4life.view;
 import java.util.List;
 
 import com.twi4life.controller.TwitterAction;
+import com.twi4life.controller.UIViewController;
 
 import javafx.concurrent.Task;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.collections.ObservableList;
+import twitter4j.MediaEntity;
 import twitter4j.Status;
 import twitter4j.TwitterException;
 
@@ -13,10 +19,10 @@ public class TimelineUpdateThread extends Task<Void>  {
 
 
 	private TwitterAction twitteraction;
-	private ObservableList<String> listTweet;
+	private ObservableList<HBox> listTweet;
 	private List<Status> listStatus;
 	private int state =0;
-	public TimelineUpdateThread(ObservableList<String> list) {
+	public TimelineUpdateThread(ObservableList<HBox> list) {
 
 
 		this.listTweet = list;
@@ -30,10 +36,10 @@ public class TimelineUpdateThread extends Task<Void>  {
 	public void setTwitteraction(TwitterAction twitteraction) {
 		this.twitteraction = twitteraction;
 	}
-	public ObservableList<String> getListTweet() {
+	public ObservableList<HBox> getListTweet() {
 		return listTweet;
 	}
-	public void setListTweet(ObservableList<String> listTweet) {
+	public void setListTweet(ObservableList<HBox> listTweet) {
 		this.listTweet = listTweet;
 	}
 	/*
@@ -43,15 +49,26 @@ public class TimelineUpdateThread extends Task<Void>  {
 	@Override
 	protected Void call() throws Exception {
 		twitteraction = new TwitterAction();
-
+		UIViewController controller = new UIViewController();
 
 		 while(true) {
 
 			try {
 				System.out.println(state++);
 				listStatus = twitteraction.getTimeline();
+
 				for(Status s : listStatus){
-					listTweet.add(s.getUser().getName() + ":" + s.getText());
+					HBox hb1 =new HBox();
+					Label screenname = new Label(s.getText());
+					Label name = new Label("@"+s.getUser().getName());
+
+					ImageView img = new ImageView();
+					Image imge = new Image(s.getUser().getProfileImageURL());
+					img.setImage(imge);
+					hb1.getChildren().add(img);
+					hb1.getChildren().add(screenname);
+					hb1.getChildren().add(name);
+					listTweet.add(hb1);
 				}
 				Thread.sleep(60000);// Pause de 1 minute
 			} catch (TwitterException e) {
