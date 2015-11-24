@@ -19,10 +19,10 @@ public class TimelineUpdateThread extends Task<Void>  {
 
 
 	private TwitterAction twitteraction;
-	private ObservableList<HBox> listTweet;
+	private List<HBox> listTweet;
 	private List<Status> listStatus;
 	private int state =0;
-	public TimelineUpdateThread(ObservableList<HBox> list) {
+	public TimelineUpdateThread(List<HBox> list) {
 
 
 		this.listTweet = list;
@@ -36,7 +36,7 @@ public class TimelineUpdateThread extends Task<Void>  {
 	public void setTwitteraction(TwitterAction twitteraction) {
 		this.twitteraction = twitteraction;
 	}
-	public ObservableList<HBox> getListTweet() {
+	public List<HBox> getListTweet() {
 		return listTweet;
 	}
 	public void setListTweet(ObservableList<HBox> listTweet) {
@@ -74,6 +74,7 @@ public class TimelineUpdateThread extends Task<Void>  {
 			} catch (TwitterException e) {
 				System.out.println("Twitter exception : ");
 				e.printStackTrace();
+
 			}
          catch (InterruptedException ex) {
             Thread.currentThread().interrupt();

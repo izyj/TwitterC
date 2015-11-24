@@ -101,7 +101,7 @@ public class UIViewController implements Initializable {
 					public void run() {
 						getNumberOfFollowerAnd();
 						statusData.clear();
-						statusData = test.getListTweet();
+						statusData.addAll(test.getListTweet());
 						statusData.addListener((ListChangeListener<? super HBox>)(ListChangeListener.Change<? extends Object> change) -> {
 							if(change.next()){
 								LOG.info("Timeline have been updated.");
